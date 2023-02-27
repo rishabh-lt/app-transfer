@@ -1,0 +1,20 @@
+service: app-transfer # NOTE: update this with your service name
+
+provider:
+  name: aws
+  runtime: go1.x
+  # This value is overridden in the github action
+  stage: ${opt:stage, 'stage'}
+  iam:
+    role: arn:aws:iam::796715966878:role/stage-falcon-screenshot-api-v1
+
+  region: us-east-1
+
+functions:
+  appTransfer:
+    handler: bin/appTransfer # reference the file and exported method
+    events: # events trigger lambda functions
+      - http: # this is an API Gateway HTTP event trigger
+          path: /
+          method: POST
+          cors: true
